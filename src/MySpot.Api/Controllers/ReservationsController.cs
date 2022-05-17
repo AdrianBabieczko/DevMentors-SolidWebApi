@@ -5,8 +5,26 @@ namespace MySpot.Api.Controllers;
 [Route("reservations")]
 public class ReservationsController : ControllerBase
 {
-    [HttpGet("get")]
-    public void GetReservation()
+    [HttpGet]
+    public void Get()
+    {
+        
+    }
+
+    [HttpPost]
+    public void Post()
+    {
+        
+    }
+    
+    [HttpPut]
+    public void Put()
+    {
+        
+    }
+    
+    [HttpDelete]
+    public void Delete()
     {
         
     }

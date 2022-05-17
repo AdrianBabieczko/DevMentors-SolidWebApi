@@ -1,3 +1,13 @@
 @url = http://localhost:5000
 
-GET {{url}}/reservations/get
+###
+GET {{url}}/reservations
+
+###
+POST {{url}}/reservations
+
+###
+PUT {{url}}/reservations
+
+###
+DELETE {{url}}/reservations
