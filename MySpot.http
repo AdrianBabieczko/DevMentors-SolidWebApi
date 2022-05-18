@@ -5,6 +5,13 @@ GET {{url}}/reservations
 
 ###
 POST {{url}}/reservations
+Content-Type: application/json
+
+{
+    "parkingSpotName": "P7",
+    "employeeName": "Joe Doe",
+    "licencePlate": "XYZ"
+}
 
 ###
 PUT {{url}}/reservations
