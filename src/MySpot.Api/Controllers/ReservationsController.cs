@@ -7,18 +7,25 @@ namespace MySpot.Api.Controllers;
 public class ReservationsController : ControllerBase
 {
     private static string[] _parkingSpotNames = {"P1", "P2", "P3", "P4", "P5"};
-    private readonly List<Reservation> _reservations = new();
+    private static readonly List<Reservation> _reservations = new();
 
     private static int Id = 1;
 
-    [HttpGet]
-    public void Get()
+    [HttpGet("{id:int}")]
+    public ActionResult<Reservation> Get([FromRoute] int id)
     {
-        
+        var reservation = _reservations.SingleOrDefault(x => x.Id == id);
+
+        if (reservation is null)
+        {
+            return NotFound();
+        }
+
+        return reservation;
     }
 
     [HttpPost]
-    public void Post([FromBody] Reservation reservation)
+    public ActionResult Post([FromBody] Reservation reservation)
     {
         reservation.Id = Id;
         reservation.Date = DateTime.Now.AddDays(1).Date;
@@ -26,8 +33,7 @@ public class ReservationsController : ControllerBase
 
         if (_parkingSpotNames.All(x => x != reservation.ParkingSpotName))
         {
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            return;
+            return BadRequest();
         }
 
         var reservationAlreadyExists = _reservations.Any(x => x.Date.Date == reservation.Date.Date
@@ -35,12 +41,13 @@ public class ReservationsController : ControllerBase
 
         if (reservationAlreadyExists)
         {
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            return;
+            return BadRequest();
         }
 
         Id++;
         _reservations.Add(reservation);
+
+        return CreatedAtAction(nameof(Get), new {Id = reservation.Id}, default);
     }
 
     [HttpPut]
