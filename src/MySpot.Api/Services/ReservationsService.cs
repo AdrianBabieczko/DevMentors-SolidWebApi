@@ -16,9 +16,17 @@ public sealed class ReservationsService
 
     public int? Create(Reservation reservation)
     {
-        reservation.Id = Id;
-        reservation.Date = DateTime.Now.AddDays(1).Date;
+        var now = DateTime.UtcNow.Date;
+        var pastDays = now.DayOfWeek is DayOfWeek.Sunday ? 7 : (int) now.DayOfWeek;
+        var remainingDays = 7 - pastDays;
 
+        if (!(reservation.Date.Date >= now && reservation.Date.Date <= now.AddDays(remainingDays)))
+        {
+            return default;
+        }
+
+        reservation.Id = Id;
+        
         if (ParkingSpotNames.All(x => x != reservation.ParkingSpotName))
         {
             return default;
@@ -42,6 +50,11 @@ public sealed class ReservationsService
         var existingReservation = Reservations.SingleOrDefault(x => x.Id == reservation.Id);
 
         if (existingReservation is null)
+        {
+            return false;
+        }
+
+        if (existingReservation.Date < DateTime.UtcNow.Date)
         {
             return false;
         }

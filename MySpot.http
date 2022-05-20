@@ -11,7 +11,8 @@ POST {{url}}/reservations
 Content-Type: application/json
 
 {
-    "parkingSpotName": "P3",
+    "parkingSpotName": "P1",
+    "date": "2022-05-20",
     "employeeName": "Joe Doe",
     "licencePlate": "XYZ"
 }
