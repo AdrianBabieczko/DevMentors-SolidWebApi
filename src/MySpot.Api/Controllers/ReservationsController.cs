@@ -3,6 +3,7 @@ using MySpot.Api.Models;
 
 namespace MySpot.Api.Controllers;
 
+[ApiController]
 [Route("reservations")]
 public class ReservationsController : ControllerBase
 {
@@ -11,8 +12,12 @@ public class ReservationsController : ControllerBase
 
     private static int Id = 1;
 
+    [HttpGet]
+    public ActionResult<Reservation[]> Get()
+        => Ok(_reservations);
+    
     [HttpGet("{id:int}")]
-    public ActionResult<Reservation> Get([FromRoute] int id)
+    public ActionResult<Reservation> Get(int id)
     {
         var reservation = _reservations.SingleOrDefault(x => x.Id == id);
 
@@ -25,7 +30,7 @@ public class ReservationsController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult Post([FromBody] Reservation reservation)
+    public ActionResult Post(Reservation reservation)
     {
         reservation.Id = Id;
         reservation.Date = DateTime.Now.AddDays(1).Date;
@@ -50,15 +55,31 @@ public class ReservationsController : ControllerBase
         return CreatedAtAction(nameof(Get), new {Id = reservation.Id}, default);
     }
 
-    [HttpPut]
-    public void Put()
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Reservation reservation)
     {
-        
+        var existingReservation = _reservations.SingleOrDefault(x => x.Id == id);
+
+        if (existingReservation is null)
+        {
+            return BadRequest();
+        }
+
+        existingReservation.LicencePlate = reservation.LicencePlate;
+        return NoContent();
     }
-    
-    [HttpDelete]
-    public void Delete()
+
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id)
     {
-        
+        var existingReservation = _reservations.SingleOrDefault(x => x.Id == id);
+
+        if (existingReservation is null)
+        {
+            return BadRequest();
+        }
+
+        _reservations.Remove(existingReservation);
+        return NoContent();
     }
 }

@@ -1,20 +1,28 @@
 @url = http://localhost:5000
 
 ###
-GET {{url}}/reservations/1
+GET {{url}}/reservations
+
+###
+GET {{url}}/reservations/3
 
 ###
 POST {{url}}/reservations
 Content-Type: application/json
 
 {
-    "parkingSpotName": "P1",
+    "parkingSpotName": "P3",
     "employeeName": "Joe Doe",
     "licencePlate": "XYZ"
 }
 
 ###
-PUT {{url}}/reservations
+PUT {{url}}/reservations/1
+Content-Type: application/json
+
+{
+    "licencePlate": "XYZZ"
+}
 
 ###
-DELETE {{url}}/reservations
+DELETE {{url}}/reservations/1
