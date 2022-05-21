@@ -12,7 +12,7 @@ public class ReservationsController : ControllerBase
 
     [HttpGet]
     public ActionResult<Reservation[]> Get()
-        => Ok(_service.GetAll());
+        => Ok(_service.GetAllWeekly());
 
     [HttpGet("{id:int}")]
     public ActionResult<Reservation> Get(int id)

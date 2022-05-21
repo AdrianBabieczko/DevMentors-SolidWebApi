@@ -2,12 +2,12 @@ namespace MySpot.Api.Entities;
 
 public class Reservation
 {
-    public int Id { get; }
+    public Guid Id { get; }
     public string EmployeeName { get; private set; }
     public string LicencePlate { get; private set; }
     public DateTime Date { get; private set; }
 
-    public Reservation(int id, string employeeName, string licencePlate, DateTime date)
+    public Reservation(Guid id, string employeeName, string licencePlate, DateTime date)
     {
         Id = id;
         EmployeeName = employeeName;

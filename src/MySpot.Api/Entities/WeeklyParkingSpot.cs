@@ -1,8 +1,10 @@
+using MySpot.Api.Exceptions;
+
 namespace MySpot.Api.Entities;
 
 public class WeeklyParkingSpot
 {
-    public Guid Id { get;}
+    public Guid Id { get; }
     public DateTime From { get; private set; }
     public DateTime To { get; private set; }
     public string Name { get; private set; }
@@ -18,11 +20,27 @@ public class WeeklyParkingSpot
         Name = name;
     }
 
-    public bool AddReservation(Reservation reservation)
+    public void AddReservation(Reservation reservation)
     {
-        if (reservation.Date.Date < From || reservation.Date.Date < DateTime.UtcNow.Date)
+        var isInvalidDate = reservation.Date.Date < From ||
+                            reservation.Date > To ||
+                            reservation.Date.Date < DateTime.UtcNow.Date;
+
+        if (isInvalidDate)
         {
-            throw new 
+            throw new InvalidReservationDateException(reservation.Date);
         }
+
+        var alreadyReserved = _reservations.Any(x => x.Date.Date == reservation.Date.Date);
+
+        if (alreadyReserved)
+        {
+            throw new ParkingSpotAlreadyReservedException(Name, reservation.Date);
+        }
+
+        _reservations.Add(reservation);
     }
-} 
+
+    public void RemoveReservation(Guid id)
+        => _reservations.RemoveWhere(x => x.Id == id);
+}
