@@ -1,3 +1,5 @@
+using MySpot.Api.Commands;
+using MySpot.Api.DTO;
 using MySpot.Api.Entities;
 
 namespace MySpot.Api.Services;
@@ -19,8 +21,10 @@ public sealed class ReservationsService
     public Reservation Get(Guid id)
         => GetAllWeekly().SingleOrDefault(x => x.Id == id);
 
-    public Guid? Create(Guid parkingSpotId, Reservation reservation)
+    public Guid? Create(CreateReservation command)
     {
+        var (parkingSpotId, reservationId, employeeName, licencePlate, date) = command;
+
         var weeklyParkingSpot = _weeklyParkingSpots.SingleOrDefault(x => x.Id == parkingSpotId);
 
         if (weeklyParkingSpot is null)
@@ -28,9 +32,10 @@ public sealed class ReservationsService
             return default;
         }
 
-        reservation.Id = Guid.NewGuid();
+        var reservation = new Reservation(reservationId, employeeName, licencePlate, date);
 
         weeklyParkingSpot.AddReservation(reservation);
+        return reservation.Id;
     }
 
     public bool Update(Reservation reservation)
