@@ -52,7 +52,7 @@ public sealed class ReservationsService
             return false;
         }
 
-        var reservation = weeklyParkingSpot
+        var reservation = weeklyParkingSpot  
     }
 
 
