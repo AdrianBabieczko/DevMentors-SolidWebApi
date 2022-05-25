@@ -15,10 +15,15 @@ public sealed class ReservationsService
         new WeeklyParkingSpot(Guid.NewGuid(), DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2), "P5")
     };
 
-    public IEnumerable<Reservation> GetAllWeekly()
-        => _weeklyParkingSpots.SelectMany(x => x.Reservations);
+    public IEnumerable<ReservationDto> GetAllWeekly()
+        => _weeklyParkingSpots.SelectMany(x => x.Reservations).Select(x => new ReservationDto
+        {
+            Id = x.Id,
+            EmployeeName = x.EmployeeName,
+            Date = x.Date.Date
+        });
 
-    public Reservation Get(Guid id)
+    public ReservationDto Get(Guid id)
         => GetAllWeekly().SingleOrDefault(x => x.Id == id);
 
     public Guid? Create(CreateReservation command)
@@ -38,23 +43,19 @@ public sealed class ReservationsService
         return reservation.Id;
     }
 
-    public bool Update(Reservation reservation)
+    public bool Update(ChangeReservationLicencePlate command)
     {
-        var existingReservation = Reservations.SingleOrDefault(x => x.Id == reservation.Id);
+        var weeklyParkingSpot = GetWeeklyParkingSpotByReservation(command.ReservationId);
 
-        if (existingReservation is null)
+        if (weeklyParkingSpot is null)
         {
             return false;
         }
 
-        if (existingReservation.Date < DateTime.UtcNow.Date)
-        {
-            return false;
-        }
-
-        existingReservation.LicencePlate = reservation.LicencePlate;
-        return true;
+        var reservation = weeklyParkingSpot
     }
+
+
 
     public bool Delete(int id)
     {
@@ -66,5 +67,10 @@ public sealed class ReservationsService
         }
 
         return Reservations.Remove(existingReservation);
+    }
+
+    private object GetWeeklyParkingSpotByReservation(Guid reservationId)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -13,11 +13,11 @@ public class ReservationsController : ControllerBase
     private readonly ReservationsService _service = new();
 
     [HttpGet]
-    public ActionResult<Reservation[]> Get()
+    public ActionResult<ReservationDto[]> Get()
         => Ok(_service.GetAllWeekly());
 
-    [HttpGet("{id:int}")]
-    public ActionResult<Reservation> Get(int id)
+    [HttpGet("{id:guid}")]
+    public ActionResult<ReservationDto> Get(Guid id)
     {
         var reservation = _service.Get(id);
 
@@ -32,22 +32,20 @@ public class ReservationsController : ControllerBase
     [HttpPost]
     public ActionResult Post(CreateReservation command)
     {
-        var id = _service.Create(command with {ReservationId = Guid.NewGuid()});
+        var id = _service.Create(command with { ReservationId = Guid.NewGuid() });
 
         if (id is null)
         {
             return BadRequest();
         }
 
-        return CreatedAtAction(nameof(Get), new {Id = id}, default);
+        return CreatedAtAction(nameof(Get), new { Id = id }, default);
     }
 
-    [HttpPut("{id:int}")]
-    public ActionResult Put(int id, Reservation reservation)
+    [HttpPut("{id:guid}")]
+    public ActionResult Put(Guid id, ChangeReservationLicencePlate command)
     {
-        reservation.Id = id;
-        
-        var succeeded = _service.Update(reservation);
+        var succeeded = _service.Update(command with { ReservationId = id });
 
         if (!succeeded)
         {
@@ -57,10 +55,10 @@ public class ReservationsController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    [HttpDelete("{id:guid}")]
+    public ActionResult Delete(Guid id)
     {
-        var succeeded = _service.Delete(id);
+        var succeeded = _service.Delete(new DeleteReservation(id));
 
         if (!succeeded)
         {
