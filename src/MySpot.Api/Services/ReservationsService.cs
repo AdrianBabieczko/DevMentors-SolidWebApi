@@ -52,25 +52,31 @@ public sealed class ReservationsService
             return false;
         }
 
-        var reservation = weeklyParkingSpot  
-    }
+        var reservation = weeklyParkingSpot.Reservations.SingleOrDefault(x => x.Id == command.ReservationId);
 
-
-
-    public bool Delete(int id)
-    {
-        var existingReservation = Reservations.SingleOrDefault(x => x.Id == id);
-
-        if (existingReservation is null)
+        if (reservation is null)
         {
             return false;
         }
 
-        return Reservations.Remove(existingReservation);
+        reservation.ChangeLicencePlate(command.LicencePlate);
+        return true;
     }
 
-    private object GetWeeklyParkingSpotByReservation(Guid reservationId)
+
+    public bool Delete(DeleteReservation command)
     {
-        throw new NotImplementedException();
+        var weeklyParkingSpot = GetWeeklyParkingSpotByReservation(command.ReservationId);
+
+        if (weeklyParkingSpot is null)
+        {
+            return false;
+        }
+
+        weeklyParkingSpot.RemoveReservation(command.ReservationId);
+        return true;
     }
+
+    private WeeklyParkingSpot GetWeeklyParkingSpotByReservation(Guid id)
+        => _weeklyParkingSpots.SingleOrDefault(x => x.Reservations.Any(r => r.Id == id));
 }
