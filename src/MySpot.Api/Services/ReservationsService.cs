@@ -8,11 +8,11 @@ public sealed class ReservationsService
 {
     private static WeeklyParkingSpot[] _weeklyParkingSpots =
     {
-        new WeeklyParkingSpot(Guid.NewGuid(), DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2), "P1"),
-        new WeeklyParkingSpot(Guid.NewGuid(), DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2), "P2"),
-        new WeeklyParkingSpot(Guid.NewGuid(), DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2), "P3"),
-        new WeeklyParkingSpot(Guid.NewGuid(), DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2), "P4"),
-        new WeeklyParkingSpot(Guid.NewGuid(), DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2), "P5")
+        new WeeklyParkingSpot(Guid.NewGuid(), new Clock().Current().AddDays(-5), DateTime.UtcNow.AddDays(2), "P1"),
+        new WeeklyParkingSpot(Guid.NewGuid(), new Clock().Current().AddDays(-5), DateTime.UtcNow.AddDays(2), "P2"),
+        new WeeklyParkingSpot(Guid.NewGuid(), new Clock().Current().AddDays(-5), DateTime.UtcNow.AddDays(2), "P3"),
+        new WeeklyParkingSpot(Guid.NewGuid(), new Clock().Current().AddDays(-5), DateTime.UtcNow.AddDays(2), "P4"),
+        new WeeklyParkingSpot(Guid.NewGuid(), new Clock().Current().AddDays(-5), DateTime.UtcNow.AddDays(2), "P5")
     };
 
     public IEnumerable<ReservationDto> GetAllWeekly()
@@ -39,7 +39,7 @@ public sealed class ReservationsService
 
         var reservation = new Reservation(reservationId, employeeName, licencePlate, date);
 
-        weeklyParkingSpot.AddReservation(reservation);
+        weeklyParkingSpot.AddReservation(reservation, new Clock().Current());
         return reservation.Id;
     }
 
