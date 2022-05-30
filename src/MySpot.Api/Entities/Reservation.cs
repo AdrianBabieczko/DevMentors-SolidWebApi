@@ -16,5 +16,12 @@ public class Reservation
     }
 
     public void ChangeLicencePlate(string licencePlate)
-        => LicencePlate = licencePlate;
+    {
+        if (!string.IsNullOrWhiteSpace(licencePlate) || (licencePlate.Length is < 5 or > 8))
+        {
+
+        }
+
+        LicencePlate = licencePlate;
+    }
 }
