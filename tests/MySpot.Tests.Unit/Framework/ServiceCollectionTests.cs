@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
@@ -11,13 +13,14 @@ public class ServiceCollectionTests
     public void test()
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddScoped(typeof(IMessenger<>), typeof(Messenger<>));
-
+        serviceCollection.AddSingleton<IUser, Admin>();
+        serviceCollection.AddSingleton<IUser, Employee>();
+        serviceCollection.AddSingleton<IUser, Manager>();
+        
         var serviceProvider = serviceCollection.BuildServiceProvider();
-        var messenger1 = serviceProvider.GetService<IMessenger<string>>();
-        var messenger2 = serviceProvider.GetService<IMessenger<int>>();
-        messenger1.ShouldNotBeNull();
-        messenger2.ShouldNotBeNull();
+
+        var users = serviceProvider.GetService<IEnumerable<IUser>>();
+        users.Count().ShouldBe(3);
 
         // using(var scope1 = serviceProvider.CreateScope())
         // {
@@ -49,5 +52,25 @@ public class ServiceCollectionTests
         {
             Console.WriteLine($"Sending a message... [ID] {_id}");
         }
+    }
+    
+    public interface IUser
+    {
+        
+    }
+
+    public class Admin : IUser
+    {
+        
+    }
+    
+    public class Employee : IUser
+    {
+        
+    }
+    
+    public class Manager : IUser
+    {
+        
     }
 }
