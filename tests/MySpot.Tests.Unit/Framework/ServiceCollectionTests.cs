@@ -16,10 +16,11 @@ public class ServiceCollectionTests
         serviceCollection.AddSingleton<IUser, Admin>();
         serviceCollection.AddSingleton<IUser, Employee>();
         serviceCollection.AddSingleton<IUser, Manager>();
+        serviceCollection.AddSingleton(typeof(IMessenger<>), typeof(Messenger<>));
         
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var users = serviceProvider.GetService<IEnumerable<IUser>>();
+        var users = serviceProvider.GetServices<IUser>();
         users.Count().ShouldBe(3);
 
         // using(var scope1 = serviceProvider.CreateScope())
@@ -39,7 +40,7 @@ public class ServiceCollectionTests
         // }
     }
 
-    private interface IMessenger<in T>
+    public interface IMessenger<in T>
     {
         void Send(T message);
     }
@@ -61,7 +62,12 @@ public class ServiceCollectionTests
 
     public class Admin : IUser
     {
-        
+        private readonly IMessenger<string> _messenger;
+
+        public Admin(IMessenger<string> messenger)
+        {
+            _messenger = messenger;
+        }   
     }
     
     public class Employee : IUser
