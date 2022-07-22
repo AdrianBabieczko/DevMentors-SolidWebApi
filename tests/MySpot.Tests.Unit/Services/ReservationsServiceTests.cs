@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MySpot.Api.Commands;
 using MySpot.Api.Entities;
+using MySpot.Api.Repositories;
 using MySpot.Api.Services;
 using MySpot.Api.ValueObjects;
 using MySpot.Tests.Unit.Shared;
@@ -15,21 +16,14 @@ public class ReservationsServiceTests
     #region ARRANGE
 
     private readonly IClock _clock;
+    private readonly IWeeklyParkingSpotRepository _weeklyParkingSpotRepository;
     private readonly ReservationsService _reservationsService;
     
     public ReservationsServiceTests()
     {
         _clock = new TestClock();
-        var weeklyParkingSpots = new List<WeeklyParkingSpot>
-        {
-            new(Guid.Parse("00000000-0000-0000-0000-000000000001"), new Week(_clock.Current()), "P1"),
-            new(Guid.Parse("00000000-0000-0000-0000-000000000002"), new Week(_clock.Current()), "P2"),
-            new(Guid.Parse("00000000-0000-0000-0000-000000000003"), new Week(_clock.Current()), "P3"),
-            new(Guid.Parse("00000000-0000-0000-0000-000000000004"), new Week(_clock.Current()), "P4"),
-            new(Guid.Parse("00000000-0000-0000-0000-000000000005"), new Week(_clock.Current()), "P5"),
-        };
-
-        _reservationsService = new ReservationsService(_clock, weeklyParkingSpots);
+        _weeklyParkingSpotRepository = new InMemoryWeeklyParkingSpotRepository(_clock);
+        _reservationsService = new ReservationsService(_clock, _weeklyParkingSpotRepository);
     }
 
     #endregion

@@ -76,6 +76,7 @@ public sealed class ReservationsService : IReservationsService
             }
 
             reservation.ChangeLicencePlate(command.LicencePlate);
+            _weeklyParkingSpotRepository.Update(weeklyParkingSpot);
             return true;
         }
         catch (Exception e)
@@ -94,6 +95,7 @@ public sealed class ReservationsService : IReservationsService
         }
 
         weeklyParkingSpot.RemoveReservation(command.ReservationId);
+        _weeklyParkingSpotRepository.Update(weeklyParkingSpot);
         return true;
     }
 
