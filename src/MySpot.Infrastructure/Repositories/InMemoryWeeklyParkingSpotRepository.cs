@@ -5,7 +5,7 @@ using MySpot.Core.ValueObjects;
 
 namespace MySpot.Infrastructure.Repositories;
 
-public class InMemoryWeeklyParkingSpotRepository : IWeeklyParkingSpotRepository
+internal sealed class InMemoryWeeklyParkingSpotRepository : IWeeklyParkingSpotRepository
 {
     private readonly List<WeeklyParkingSpot> _weeklyParkingSpots;
 
