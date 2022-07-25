@@ -1,4 +1,6 @@
-namespace MySpot.Api.Services
+using MySpot.Application.Services;
+
+namespace MySpot.Infrastructure.Time
 {
     public sealed  class Clock : IClock
     {

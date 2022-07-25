@@ -1,11 +1,11 @@
-using MySpot.Api.Commands;
-using MySpot.Api.DTO;
-using MySpot.Api.Entities;
-using MySpot.Api.Exceptions;
-using MySpot.Api.Repositories;
-using MySpot.Api.ValueObjects;
+using MySpot.Application.Commands;
+using MySpot.Application.DTO;
+using MySpot.Core.Entities;
+using MySpot.Core.Exceptions;
+using MySpot.Core.Repositories;
+using MySpot.Core.ValueObjects;
 
-namespace MySpot.Api.Services;
+namespace MySpot.Application.Services;
 
 public sealed class ReservationsService : IReservationsService
 {
@@ -49,7 +49,7 @@ public sealed class ReservationsService : IReservationsService
             weeklyParkingSpot.AddReservation(reservation, new Date(CurrentDate()));
             return reservation.Id;
         }
-        catch (CustomException e)
+        catch (CustomException)
         {
             return default;
         }
@@ -79,7 +79,7 @@ public sealed class ReservationsService : IReservationsService
             _weeklyParkingSpotRepository.Update(weeklyParkingSpot);
             return true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }
