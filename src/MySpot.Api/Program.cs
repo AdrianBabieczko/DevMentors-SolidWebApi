@@ -1,14 +1,13 @@
-using MySpot.Application.Services;
-using MySpot.Core.Repositories;
-using MySpot.Infrastructure.Repositories;
-using MySpot.Infrastructure.Time;
+using MySpot.Application;
+using MySpot.Core;
+using MySpot.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddSingleton<IWeeklyParkingSpotRepository, InMemoryWeeklyParkingSpotRepository >()
-    .AddSingleton<IReservationsService,ReservationsService>()
-    .AddSingleton<IClock,Clock>()
+    .AddCore()
+    .AddApplication()
+    .AddInfrastructure()
     .AddControllers();
 
 var app = builder.Build();
