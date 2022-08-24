@@ -15,7 +15,7 @@ public static class Extensions
     {
         services
             .AddPostgres()
-            .AddSingleton<IWeeklyParkingSpotRepository, InMemoryWeeklyParkingSpotRepository>()
+            //.AddSingleton<IWeeklyParkingSpotRepository, InMemoryWeeklyParkingSpotRepository>()
             .AddSingleton<IClock, Clock>();
         
         return services;
