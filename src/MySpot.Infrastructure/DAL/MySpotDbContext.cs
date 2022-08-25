@@ -3,8 +3,12 @@ using MySpot.Core.Entities;
 
 namespace MySpot.Infrastructure.DAL;
 
-internal class MySpotDbContext : DbContext
+internal sealed class MySpotDbContext : DbContext
 {
      public DbSet<Reservation> Reservations { get; set; }
      public DbSet<WeeklyParkingSpot> WeeklyParkingSpots { get; set; }
+
+     public MySpotDbContext(DbContextOptions<MySpotDbContext> options) : base(options)
+     {
+     }
 }

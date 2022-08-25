@@ -18,6 +18,9 @@ internal sealed class PostgresWeeklyParkingSpotRepository : IWeeklyParkingSpotRe
 
     public IEnumerable<WeeklyParkingSpot> GetAll() => _weeklyParkingSpots.ToList();
 
+    public IEnumerable<WeeklyParkingSpot> GetByWeek(Week week) =>
+        _weeklyParkingSpots.Where(x => x.Week == week).ToList();
+
     public WeeklyParkingSpot Get(ParkingSpotId id) => _weeklyParkingSpots.SingleOrDefault(x => x.Id == id);
 
     public void Add(WeeklyParkingSpot weeklyParkingSpot)
