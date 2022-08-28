@@ -11,4 +11,9 @@ internal sealed class MySpotDbContext : DbContext
      public MySpotDbContext(DbContextOptions<MySpotDbContext> options) : base(options)
      {
      }
+
+     protected override void OnModelCreating(ModelBuilder modelBuilder)
+     {
+          modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+     }
 }
