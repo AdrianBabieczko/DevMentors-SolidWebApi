@@ -15,6 +15,8 @@ internal static class Extensions
         services.AddScoped<IWeeklyParkingSpotRepository, PostgresWeeklyParkingSpotRepository>();
         services.AddHostedService<DatabaseInitializer>();
         
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        
         return services;
     }
 }
